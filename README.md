@@ -4,7 +4,7 @@
 
 ## 特性
 - 基础镜像：Ubuntu 24.04 (noble)，默认中文环境 `zh_CN.UTF-8`。
-- 包管理：APT（`ripgrep`/`bat`/`zsh-plugins` 等）、NodeSource（Node/npm）、官方脚本（bun、nexttrace）；fzf 与 zoxide 通过 Oh My Zsh 插件启用。
+- 包管理：APT（`ripgrep`/`bat`/`zoxide`/`zsh-plugins` 等）、NodeSource（Node/npm）、官方脚本（bun、nexttrace、fzf）。
 - Shell：默认进入 zsh（Oh My Zsh 在 root 下启用，常用插件与别名已配置）。
 - 构建发布：支持本地构建，也可用 GitHub Actions 推送到 GHCR 以便拉取。
 - 额外 CLI：全局安装 `@openai/codex` 与 `@anthropic-ai/claude-code`。
@@ -34,8 +34,8 @@
 - 一次性命令（需要加载 `.zshrc`）：`docker run --rm ghcr.io/<owner>/<repo>:latest -lic 'your cmd'`
   - 说明：`-l` 登录 shell，读登录文件；`-i` 交互，读 `.zshrc`；`-c` 执行字符串命令。
   - Node/npm：来自 NodeSource（current 分支）
-  - zoxide：通过 Oh My Zsh 插件启用（需系统存在 zoxide 二进制）
-  - fzf：通过 Oh My Zsh 插件启用（需系统存在 fzf 二进制）
+  - zoxide：APT 安装，Oh My Zsh 插件启用
+  - fzf：官方脚本安装，Oh My Zsh 插件启用
   - bun：官方脚本安装并放到 `/usr/local/bin/bun`
   - nexttrace：官方一键脚本安装
 
