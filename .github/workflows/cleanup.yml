@@ -3,7 +3,12 @@ name: Cleanup GHCR
 on:
   schedule:
     - cron: "0 3 * * 0"  # 每周日 03:00 UTC
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      keep:
+        description: "Min versions to keep"
+        default: "10"
+        required: false
 
 permissions:
   contents: read
@@ -20,5 +25,4 @@ jobs:
           package-type: container
           package-name: ${{ github.event.repository.name }}
           delete-only-untagged-versions: true
-          min-versions-to-keep: 10
-
+          min-versions-to-keep: ${{ inputs.keep || '10' }}
