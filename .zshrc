@@ -119,3 +119,6 @@ DEFAULT_USER=$USER
 if [[ $- == *i* ]] && command -v bat >/dev/null 2>&1; then
   alias cat='bat'
 fi
+
+# bun 简写
+alias bunx='bun x'
