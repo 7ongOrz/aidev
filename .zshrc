@@ -120,3 +120,6 @@ fi
 
 # bun 简写
 alias bunx='bun x'
+
+# 列表：显示隐藏文件
+alias ll='ls -alh'
