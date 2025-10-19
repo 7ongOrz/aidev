@@ -1,0 +1,24 @@
+name: Cleanup GHCR
+
+on:
+  schedule:
+    - cron: "0 3 * * 0"  # 每周日 03:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  prune-untagged:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Delete untagged container versions
+        uses: actions/delete-package-versions@v5
+        with:
+          owner: ${{ github.repository_owner }}
+          package-type: container
+          package-name: ${{ github.event.repository.name }}
+          delete-only-untagged-versions: true
+          min-versions-to-keep: 10
+
