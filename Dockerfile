@@ -21,7 +21,9 @@ RUN set -eux; \
         sudo \
         curl \
         wget \
+        rsync \
         git \
+        openssh-client \
         vim \
         zsh \
         file \
