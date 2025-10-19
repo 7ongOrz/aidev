@@ -5,7 +5,8 @@ ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Shanghai \
     LANG=zh_CN.UTF-8 \
     LANGUAGE=zh_CN:zh \
-    LC_ALL=zh_CN.UTF-8
+    LC_ALL=zh_CN.UTF-8 \
+    TERM=xterm-256color
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
