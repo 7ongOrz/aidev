@@ -67,9 +67,9 @@ RUN set -eux; \
     install -m 0755 ~/.fzf/bin/fzf /usr/local/bin/fzf; \
     rm -rf ~/.fzf
 
-# 安装 Node.js（NodeSource）
+# 安装 Node.js（NodeSource 24.x）
 RUN set -eux; \
-    curl -fsSL https://deb.nodesource.com/setup_current.x | bash -; \
+    curl -fsSL https://deb.nodesource.com/setup_24.x | bash -; \
     apt-get install -y --no-install-recommends nodejs; \
     npm --version; \
     npm install -g @openai/codex @anthropic-ai/claude-code; \
