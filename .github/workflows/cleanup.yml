@@ -2,7 +2,7 @@ name: Cleanup GHCR
 
 on:
   schedule:
-    - cron: "0 3 * * 0"  # 每周日 03:00 UTC
+    - cron: "0 20 * * 0"  # 每周日 20:00 UTC（北京时间周一 04:00）
   workflow_dispatch:
     inputs:
       keep:
