@@ -4,6 +4,8 @@ on:
   push:
     branches: [ "main", "master" ]
     tags: [ "v*", "*.*.*" ]
+  schedule:
+    - cron: "0 18 * * *" # 每日 18:00 UTC 构建（北京时间 02:00）
   workflow_dispatch: {}
 
 permissions:
@@ -14,8 +16,15 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout (non-schedule)
+        if: ${{ github.event_name != 'schedule' }}
         uses: actions/checkout@v4
+
+      - name: Checkout master (schedule)
+        if: ${{ github.event_name == 'schedule' }}
+        uses: actions/checkout@v4
+        with:
+          ref: master
 
       - name: Configure Git identity
         run: |
