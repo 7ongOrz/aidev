@@ -70,6 +70,7 @@ RUN set -eux; \
     echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/linuxbrew/.zprofile; \
     echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/linuxbrew/.zshrc; \
     echo 'source <(fzf --zsh)' >> /home/linuxbrew/.zshrc; \
+    echo '[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh' >> /home/linuxbrew/.zshrc; \
     echo 'source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> /home/linuxbrew/.zshrc; \
     echo 'source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> /home/linuxbrew/.zshrc
 USER root
