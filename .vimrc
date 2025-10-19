@@ -1,8 +1,8 @@
 " 不兼容 Vi 的旧模式，使用 Vim 现代特性
 set nocompatible
 
-" 使用系统剪贴板
-set clipboard=unnamed
+" 使用系统剪贴板（Linux 使用 unnamedplus 对应 + 寄存器）
+set clipboard=unnamedplus
 
 " 显示行号
 set number
