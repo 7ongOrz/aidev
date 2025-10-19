@@ -1,0 +1,39 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+
+# Node / build
+node_modules/
+dist/
+build/
+
+# Shell history/artifacts
+.zsh_history
+.zsh_sessions
+.zcompdump*
+.bash_history
+
+# Env & docker
+.env
+*.tar

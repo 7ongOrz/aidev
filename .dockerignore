@@ -1,0 +1,29 @@
+# VCS
+.git
+.gitignore
+
+# CI config 不需要打进镜像
+.github
+
+# 编辑器与系统缓存
+.DS_Store
+*.swp
+*.swo
+*.log
+
+# Node / Python / 构建产物（若后续项目加入）
+node_modules
+dist
+build
+__pycache__
+*.pyc
+
+# 文档可选忽略（减少上下文体积）
+README*
+*.md
+
+# Sensitive files (prevent leaking into build context)
+.env*
+.npmrc
+*.pem
+*.key
