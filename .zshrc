@@ -111,8 +111,6 @@ source <(fzf --zsh)
 source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-DEFAULT_USER=$USER
-
 # autojump 已由 Oh My Zsh 插件托管，无需手动 source
 
 # 体验增强：用 bat 作为 cat（仅交互式生效，且 bat 存在时）
