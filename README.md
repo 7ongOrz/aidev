@@ -24,7 +24,7 @@
 说明：环境通过 APT/官方脚本/NodeSource 管理与安装。
 
 ## 通过 GHCR 使用
-- 推送到 `main` 或 `master` 分支得到 `:latest`，打 tag 得到对应版本。
+- 推送到 `master` 分支得到 `:latest`，打 tag 得到对应版本。
 - 登录：`echo <GITHUB_TOKEN> | docker login ghcr.io -u <USERNAME> --password-stdin`
 - 拉取：`docker pull ghcr.io/<owner>/<repo>:latest`
 
