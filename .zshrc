@@ -108,7 +108,6 @@ source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 alias bat=batcat
-alias cat=batcat
 
 alias bunx='bun x'
 alias ll='ls -alh'
