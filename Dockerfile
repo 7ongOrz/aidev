@@ -46,7 +46,8 @@ RUN set -eux; \
     sed -i 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/' /etc/locale.gen; \
     locale-gen zh_CN.UTF-8; \
     update-locale LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8; \
-    rm -rf /var/lib/apt/lists/*
+    apt-get clean; \
+    rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
 # 安装 Oh My Zsh
 RUN set -eux; \
@@ -92,7 +93,9 @@ RUN set -eux; \
       oven-sh/bun/bun; \
     npm --version; \
     npm install -g @openai/codex @anthropic-ai/claude-code; \
-    brew cleanup -s || true
+    npm cache clean --force || true; \
+    brew cleanup -s || true; \
+    rm -rf "$(brew --cache)" /home/linuxbrew/.cache || true
 USER root
 
 # 拷贝项目中的配置（若存在）
