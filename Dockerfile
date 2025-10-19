@@ -57,12 +57,11 @@ RUN set -eux; \
 # 安装 Oh My Zsh
 RUN set -eux; \
     export ZSH="/root/.oh-my-zsh"; \
-    git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git "$ZSH"; \
-    true
+    git clone --depth=1 --single-branch https://github.com/ohmyzsh/ohmyzsh.git "$ZSH"
 
 # 安装 fzf（官方脚本，安装后清理缓存）
 RUN set -eux; \
-    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf; \
+    git clone --depth 1 --single-branch https://github.com/junegunn/fzf.git ~/.fzf; \
     ~/.fzf/install --bin --no-update-rc; \
     install -m 0755 ~/.fzf/bin/fzf /usr/local/bin/fzf; \
     rm -rf ~/.fzf
@@ -73,7 +72,7 @@ RUN set -eux; \
     apt-get install -y --no-install-recommends nodejs; \
     npm --version; \
     npm install -g @openai/codex @anthropic-ai/claude-code; \
-    npm cache clean --force || true; \
+    npm cache clean --force; \
     rm -rf /var/lib/apt/lists/*
 
 # 安装 bun（官方脚本，系统路径）
@@ -86,7 +85,7 @@ RUN set -eux; \
 # 安装 nexttrace（官方一键脚本）
 RUN set -eux; \
     curl -sL nxtrace.org/nt | bash; \
-    command -v nexttrace >/dev/null 2>&1 || true
+    nexttrace --version
 
 WORKDIR /workspace
 COPY .vimrc /root/.vimrc
