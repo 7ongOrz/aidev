@@ -89,7 +89,7 @@ RUN set -eux; \
       ripgrep \
       nexttrace \
       node \
-      bun; \
+      oven-sh/bun/bun; \
     npm --version; \
     npm install -g @openai/codex @anthropic-ai/claude-code; \
     brew cleanup -s || true
