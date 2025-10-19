@@ -10,7 +10,7 @@ ENV TZ=Asia/Shanghai \
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
-# 基础依赖 + 常用工具
+# 基础依赖 + 常用工具（APT）
 RUN set -eux; \
     apt-get update; \
     apt-get upgrade -y; \
@@ -42,8 +42,12 @@ RUN set -eux; \
         build-essential \
         python3 \
         python3-pip \
-        procps; \
-    # locale: zh_CN.UTF-8
+        procps \
+        ripgrep \
+        bat \
+        zsh-autosuggestions \
+        zsh-syntax-highlighting \
+        zoxide; \
     sed -i 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/' /etc/locale.gen; \
     locale-gen zh_CN.UTF-8; \
     update-locale LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8; \
@@ -56,56 +60,37 @@ RUN set -eux; \
     git clone --depth=1 https://github.com/ohmyzsh/ohmyzsh.git "$ZSH"; \
     true
 
-# 安装 Homebrew（Linuxbrew）：创建用户（root 阶段）
+# 安装 fzf（官方脚本，安装后清理缓存）
 RUN set -eux; \
-    useradd -m -s /bin/bash linuxbrew; \
-    echo 'linuxbrew ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/linuxbrew
+    git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf; \
+    ~/.fzf/install --bin --no-update-rc; \
+    install -m 0755 ~/.fzf/bin/fzf /usr/local/bin/fzf; \
+    rm -rf ~/.fzf
 
-# 以 linuxbrew 身份执行安装脚本并初始化其 shell（不污染全局）
-USER linuxbrew
+# 使用 NodeSource + 官方脚本 + APT
+# 安装 Node.js（最新 current）+ npm 最新
 RUN set -eux; \
-    curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh -o /home/linuxbrew/install.sh; \
-    NONINTERACTIVE=1 /bin/bash /home/linuxbrew/install.sh; \
-    rm -f /home/linuxbrew/install.sh; \
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/linuxbrew/.zprofile; \
-    echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> /home/linuxbrew/.zshrc; \
-    echo 'source <(fzf --zsh)' >> /home/linuxbrew/.zshrc; \
-    echo '[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh' >> /home/linuxbrew/.zshrc; \
-    echo 'source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh' >> /home/linuxbrew/.zshrc; \
-    echo 'source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh' >> /home/linuxbrew/.zshrc
-USER root
-
-# 将 brew 放入 PATH（对所有后续层生效）
-ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:${PATH}"
-
-# 使用 brew 安装常用工具与前端运行时（与 mac 一致）
-USER linuxbrew
-RUN set -eux; \
-    export HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_ANALYTICS=1; \
-    brew --version; \
-    brew install \
-      zsh-autosuggestions \
-      zsh-syntax-highlighting \
-      autojump \
-      fzf \
-      bat \
-      ripgrep \
-      nexttrace \
-      node \
-      oven-sh/bun/bun; \
+    curl -fsSL https://deb.nodesource.com/setup_current.x | bash -; \
+    apt-get install -y --no-install-recommends nodejs; \
     npm --version; \
     npm install -g @openai/codex @anthropic-ai/claude-code; \
     npm cache clean --force || true; \
-    brew cleanup -s || true; \
-    rm -rf "$(brew --cache)" /home/linuxbrew/.cache || true
-USER root
+    rm -rf /var/lib/apt/lists/*
 
-# 拷贝项目中的配置（若存在）
+# 安装 bun（官方脚本，系统路径）
+ENV BUN_INSTALL=/usr/local/bun
+RUN set -eux; \
+    bash -lc 'curl -fsSL https://bun.sh/install | bash'; \
+    ln -sf /usr/local/bun/bin/bun /usr/local/bin/bun; \
+    bun --version
+
+# 安装 nexttrace（官方一键脚本）
+RUN set -eux; \
+    curl -sL nxtrace.org/nt | bash; \
+    command -v nexttrace >/dev/null 2>&1 || true
+
 WORKDIR /workspace
 COPY .vimrc /root/.vimrc
-COPY --chown=linuxbrew:linuxbrew .vimrc /home/linuxbrew/.vimrc
-
-# 拷贝并使用仓库内 .zshrc（包含 brew 路径的插件加载方式）
 COPY .zshrc /root/.zshrc
 
 # 切换默认 shell 为 zsh

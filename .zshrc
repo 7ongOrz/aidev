@@ -10,9 +10,6 @@ export ZSH="$HOME/.oh-my-zsh"
 # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="agnoster"
 
-# 在容器中，Homebrew 安装在 linuxbrew 用户下。
-# 作为 root 登录时，直接运行 brew 会被拒绝，这里用函数以 linuxbrew 身份执行。
-brew() { sudo -u linuxbrew -H sh -c 'cd "$HOME" && exec /home/linuxbrew/.linuxbrew/bin/brew "$@"' _ "$@"; }
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -74,7 +71,7 @@ brew() { sudo -u linuxbrew -H sh -c 'cd "$HOME" && exec /home/linuxbrew/.linuxbr
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git brew)
+plugins=(git fzf zoxide)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -107,20 +104,11 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-source <(fzf --zsh)
-[[ -s $(brew --prefix)/etc/profile.d/autojump.sh ]] && . $(brew --prefix)/etc/profile.d/autojump.sh
-source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# autojump 已由 Oh My Zsh 插件托管，无需手动 source
+alias bat=batcat
+alias cat=batcat
 
-# 体验增强：用 bat 作为 cat（仅交互式生效，且 bat 存在时）
-if [[ $- == *i* ]] && command -v bat >/dev/null 2>&1; then
-  alias cat='bat'
-fi
-
-# bun 简写
 alias bunx='bun x'
-
-# 列表：显示隐藏文件
 alias ll='ls -alh'
