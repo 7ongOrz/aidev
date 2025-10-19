@@ -12,7 +12,7 @@ ZSH_THEME="agnoster"
 
 # 在容器中，Homebrew 安装在 linuxbrew 用户下。
 # 作为 root 登录时，直接运行 brew 会被拒绝，这里用函数以 linuxbrew 身份执行。
-brew() { sudo -u linuxbrew -H /home/linuxbrew/.linuxbrew/bin/brew "$@"; }
+brew() { sudo -iu linuxbrew /home/linuxbrew/.linuxbrew/bin/brew "$@"; }
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
