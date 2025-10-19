@@ -2,7 +2,7 @@ name: Build and Push Docker Image
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "master" ]
     tags: [ "v*", "*.*.*" ]
   schedule:
     - cron: "0 18 * * *" # 每日 18:00 UTC 构建（北京时间 02:00）
@@ -11,6 +11,10 @@ on:
 permissions:
   contents: read
   packages: write
+
+concurrency:
+  group: docker-build
+  cancel-in-progress: false
 
 jobs:
   docker:
