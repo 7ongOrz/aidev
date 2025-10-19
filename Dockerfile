@@ -67,8 +67,7 @@ RUN set -eux; \
     install -m 0755 ~/.fzf/bin/fzf /usr/local/bin/fzf; \
     rm -rf ~/.fzf
 
-# 使用 NodeSource + 官方脚本 + APT
-# 安装 Node.js（最新 current）+ npm 最新
+# 安装 Node.js（NodeSource）
 RUN set -eux; \
     curl -fsSL https://deb.nodesource.com/setup_current.x | bash -; \
     apt-get install -y --no-install-recommends nodejs; \
