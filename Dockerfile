@@ -29,6 +29,7 @@ RUN set -eux; \
         file \
         unzip \
         zip \
+        pigz \
         less \
         gnupg \
         traceroute \
