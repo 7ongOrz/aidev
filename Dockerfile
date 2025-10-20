@@ -94,8 +94,7 @@ RUN set -eux; \
 RUN set -eux; \
     curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.appimage; \
     chmod u+x nvim-linux-x86_64.appimage; \
-    mv nvim-linux-x86_64.appimage /usr/local/bin/nvim; \
-    nvim --version
+    mv nvim-linux-x86_64.appimage /usr/local/bin/nvim
 
 # 克隆 nvim 配置（AstroNvim）
 RUN set -eux; \
