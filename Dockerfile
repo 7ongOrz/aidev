@@ -90,6 +90,20 @@ RUN set -eux; \
     curl -sL nxtrace.org/nt | bash; \
     nexttrace --version
 
+# 安装 Neovim 最新版（AppImage）
+RUN set -eux; \
+    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage; \
+    chmod u+x nvim.appimage; \
+    mv nvim.appimage /usr/local/bin/nvim; \
+    nvim --version
+
+# 克隆 nvim 配置（AstroNvim）
+RUN set -eux; \
+    git clone --depth=1 https://github.com/7ongOrz/dotfiles.git /tmp/dotfiles; \
+    mkdir -p /root/.config; \
+    mv /tmp/dotfiles/nvim /root/.config/nvim; \
+    rm -rf /tmp/dotfiles
+
 WORKDIR /workspace
 COPY .vimrc /root/.vimrc
 COPY .zshrc /root/.zshrc
