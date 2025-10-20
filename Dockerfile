@@ -50,8 +50,7 @@ RUN set -eux; \
         bat \
         zsh-autosuggestions \
         zsh-syntax-highlighting \
-        zoxide \
-        libfuse2; \
+        zoxide; \
     sed -i 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/' /etc/locale.gen; \
     locale-gen zh_CN.UTF-8; \
     update-locale LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8; \
@@ -91,11 +90,12 @@ RUN set -eux; \
     curl -sL nxtrace.org/nt | bash; \
     nexttrace --version
 
-# 安装 Neovim 最新版（AppImage）
+# 安装 Neovim 最新版（Tarball）
 RUN set -eux; \
-    curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.appimage; \
-    chmod u+x nvim-linux-x86_64.appimage; \
-    mv nvim-linux-x86_64.appimage /usr/local/bin/nvim
+    curl -L https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.tar.gz \
+        | tar -C /opt -xz; \
+    ln -s /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim; \
+    nvim --version
 
 # 克隆 nvim 配置（AstroNvim）
 RUN set -eux; \
