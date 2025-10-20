@@ -50,7 +50,8 @@ RUN set -eux; \
         bat \
         zsh-autosuggestions \
         zsh-syntax-highlighting \
-        zoxide; \
+        zoxide \
+        libfuse2; \
     sed -i 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/' /etc/locale.gen; \
     locale-gen zh_CN.UTF-8; \
     update-locale LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8; \
