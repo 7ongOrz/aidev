@@ -92,9 +92,9 @@ RUN set -eux; \
 
 # 安装 Neovim 最新版（AppImage）
 RUN set -eux; \
-    curl -LO https://github.com/neovim/neovim/releases/latest/download/nvim.appimage; \
-    chmod u+x nvim.appimage; \
-    mv nvim.appimage /usr/local/bin/nvim; \
+    curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.appimage; \
+    chmod u+x nvim-linux-x86_64.appimage; \
+    mv nvim-linux-x86_64.appimage /usr/local/bin/nvim; \
     nvim --version
 
 # 克隆 nvim 配置（AstroNvim）
