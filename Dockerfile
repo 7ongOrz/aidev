@@ -43,8 +43,10 @@ RUN set -eux; \
         tree \
         net-tools \
         build-essential \
+        golang-go \
         python3 \
         python3-pip \
+        python3-venv \
         procps \
         ripgrep \
         bat \
