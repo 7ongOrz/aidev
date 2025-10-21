@@ -102,14 +102,15 @@ RUN set -eux; \
 
 # 克隆 dotfiles 配置（nvim 和 tmux，包含子模块）
 RUN set -eux; \
-    git clone --recurse-submodules https://github.com/7ongOrz/dotfiles.git /root/dotfiles; \
+    git clone --depth=1 --recurse-submodules --shallow-submodules https://github.com/7ongOrz/dotfiles.git /root/dotfiles; \
     mkdir -p /root/.config; \
     ln -s /root/dotfiles/nvim /root/.config/nvim; \
     ln -s /root/dotfiles/tmux /root/.config/tmux
 
-WORKDIR /workspace
 COPY .vimrc /root/.vimrc
 COPY .zshrc /root/.zshrc
+
+WORKDIR /root
 
 # 切换默认 shell 为 zsh
 RUN chsh -s /usr/bin/zsh root

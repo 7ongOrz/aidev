@@ -19,7 +19,8 @@
 
 ## 本地构建与运行
 - 构建：`docker build -t <repo>:latest .`
-- 进入：`docker run -it --rm -v $(pwd):/workspace <repo>:latest`（默认 zsh）
+- 进入：`docker run -it --rm <repo>:latest`（默认 zsh，工作目录为 `~`）
+- 挂载本地目录：`docker run -it --rm -v $(pwd):/workspace <repo>:latest`
 - 指定 bash：`docker run -it --rm --entrypoint /bin/bash <repo>:latest`
 - 一次性命令：`docker run --rm <repo>:latest -lc 'node -v'`
 
