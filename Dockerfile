@@ -38,12 +38,12 @@ RUN set -eux; \
         mtr-tiny \
         htop \
         jq \
+        yq \
         git-lfs \
         p7zip-full \
         tree \
         net-tools \
         build-essential \
-        golang-go \
         python3 \
         python3-pip \
         python3-venv \
