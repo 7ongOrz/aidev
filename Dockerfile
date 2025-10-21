@@ -26,6 +26,7 @@ RUN set -eux; \
         openssh-client \
         vim \
         zsh \
+        tmux \
         file \
         unzip \
         zip \
@@ -99,12 +100,15 @@ RUN set -eux; \
     ln -s /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim; \
     nvim --version
 
-# 克隆 nvim 配置（AstroNvim）
+# 克隆 dotfiles 配置（稀疏克隆 nvim 和 tmux，包含子模块）
 RUN set -eux; \
-    git clone --depth=1 https://github.com/7ongOrz/dotfiles.git /tmp/dotfiles; \
+    git clone --filter=blob:none --sparse https://github.com/7ongOrz/dotfiles.git /root/dotfiles; \
+    cd /root/dotfiles; \
+    git sparse-checkout set nvim tmux; \
+    git submodule update --init --recursive; \
     mkdir -p /root/.config; \
-    mv /tmp/dotfiles/nvim /root/.config/nvim; \
-    rm -rf /tmp/dotfiles
+    ln -s /root/dotfiles/nvim /root/.config/nvim; \
+    ln -s /root/dotfiles/tmux /root/.config/tmux
 
 WORKDIR /workspace
 COPY .vimrc /root/.vimrc

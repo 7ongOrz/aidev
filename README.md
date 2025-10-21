@@ -6,6 +6,7 @@
 - 基础镜像：Ubuntu 24.04 (noble)，默认中文环境 `zh_CN.UTF-8`。
 - 包管理：APT（`ripgrep`/`bat`/`zoxide`/`zsh-plugins` 等）、NodeSource（Node 24/npm）、官方脚本（bun、nexttrace、fzf）。
 - 编辑器：内置最新版 Neovim（Tarball），配置 AstroNvim，包含 Mason 所需运行时（Python）。
+- 终端复用器：tmux，配置文件来自个人 dotfiles。
 - Shell：默认进入 zsh（Oh My Zsh 在 root 下启用，常用插件与别名已配置）。
 - 构建发布：支持本地构建，也可用 GitHub Actions 推送到 GHCR 以便拉取。
 - 额外 CLI：全局安装 `@openai/codex` 与 `@anthropic-ai/claude-code`。
@@ -34,7 +35,9 @@
 - 一次性命令（不依赖 `.zshrc`）：`docker run --rm ghcr.io/<owner>/<repo>:latest -lc 'node -v'`
 - 一次性命令（需要加载 `.zshrc`）：`docker run --rm ghcr.io/<owner>/<repo>:latest -lic 'your cmd'`
   - 说明：`-l` 登录 shell，读登录文件；`-i` 交互，读 `.zshrc`；`-c` 执行字符串命令。
-  - Neovim：Tarball 方式安装最新版，配置位于 `~/.config/nvim`（AstroNvim），已安装 Mason 所需的 Python 运行时
+  - Neovim：配置位于 `~/.config/nvim`（AstroNvim），已安装 Mason 所需的 Python 运行时
+  - tmux：配置位于 `~/.config/tmux`
+  - 更新配置：`cd ~/dotfiles && git pull && git submodule update --remote`
   - Python：APT 安装 python3/pip/venv（支持 Mason 安装 Python 工具）
   - Node/npm：来自 NodeSource（Node 24.x）
   - yq：APT 安装，YAML 处理工具
