@@ -28,6 +28,7 @@ RUN set -eux; \
         zsh \
         tmux \
         file \
+        entr \
         unzip \
         zip \
         pigz \
