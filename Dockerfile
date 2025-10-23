@@ -105,7 +105,7 @@ RUN set -eux; \
     nvim --version
 
 # 当 dotfiles 有更新时自动破坏缓存
-ADD https://api.github.com/repos/7ongOrz/dotfiles/commits/master /tmp/dotfiles-version.json
+ADD https://api.github.com/repos/7ongOrz/dotfiles/commits?sha=main&per_page=1 /tmp/dotfiles-version.json
 # 克隆 dotfiles 配置（nvim 和 tmux，包含子模块）
 RUN set -eux; \
     rm -f /tmp/dotfiles-version.json; \
