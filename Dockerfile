@@ -78,6 +78,9 @@ RUN set -eux; \
     curl -fsSL https://deb.nodesource.com/setup_24.x | bash -; \
     apt-get install -y --no-install-recommends nodejs; \
     npm --version; \
+    CODEX_VER=$(npm view @openai/codex version); \
+    CLAUDE_VER=$(npm view @anthropic-ai/claude-code version); \
+    echo "Installing @openai/codex@${CODEX_VER} @anthropic-ai/claude-code@${CLAUDE_VER}"; \
     npm install -g @openai/codex @anthropic-ai/claude-code; \
     npm cache clean --force; \
     rm -rf /var/lib/apt/lists/*
