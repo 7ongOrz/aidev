@@ -73,14 +73,14 @@ RUN set -eux; \
     install -m 0755 ~/.fzf/bin/fzf /usr/local/bin/fzf; \
     rm -rf ~/.fzf
 
+# 当 npm 包有更新时自动破坏缓存
+ADD https://registry.npmjs.org/@openai/codex/latest /tmp/codex.json
+ADD https://registry.npmjs.org/@anthropic-ai/claude-code/latest /tmp/claude.json
 # 安装 Node.js（NodeSource 24.x）
 RUN set -eux; \
     curl -fsSL https://deb.nodesource.com/setup_24.x | bash -; \
     apt-get install -y --no-install-recommends nodejs; \
-    npm --version; \
-    CODEX_VER=$(npm view @openai/codex version); \
-    CLAUDE_VER=$(npm view @anthropic-ai/claude-code version); \
-    echo "Installing @openai/codex@${CODEX_VER} @anthropic-ai/claude-code@${CLAUDE_VER}"; \
+    rm -f /tmp/*.json; \
     npm install -g @openai/codex @anthropic-ai/claude-code; \
     npm cache clean --force; \
     rm -rf /var/lib/apt/lists/*
@@ -104,11 +104,13 @@ RUN set -eux; \
     ln -s /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim; \
     nvim --version
 
+# 当 dotfiles 有更新时自动破坏缓存
+ADD https://api.github.com/repos/7ongOrz/dotfiles/commits/master /tmp/dotfiles-version.json
 # 克隆 dotfiles 配置（nvim 和 tmux，包含子模块）
 RUN set -eux; \
-    DOTFILES_SHA=$(curl -s https://api.github.com/repos/7ongOrz/dotfiles/commits/master | grep -m1 '"sha"' | cut -d'"' -f4); \
-    echo "Cloning dotfiles at ${DOTFILES_SHA}"; \
-    git clone --depth=1 --recurse-submodules --shallow-submodules https://github.com/7ongOrz/dotfiles.git /root/dotfiles; \
+    rm -f /tmp/dotfiles-version.json; \
+    git clone --depth=1 --recurse-submodules --shallow-submodules \
+        https://github.com/7ongOrz/dotfiles.git /root/dotfiles; \
     mkdir -p /root/.config; \
     ln -s /root/dotfiles/nvim /root/.config/nvim; \
     ln -s /root/dotfiles/tmux /root/.config/tmux
