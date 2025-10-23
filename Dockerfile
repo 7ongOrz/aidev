@@ -103,6 +103,8 @@ RUN set -eux; \
 
 # 克隆 dotfiles 配置（nvim 和 tmux，包含子模块）
 RUN set -eux; \
+    DOTFILES_SHA=$(curl -s https://api.github.com/repos/7ongOrz/dotfiles/commits/master | grep -m1 '"sha"' | cut -d'"' -f4); \
+    echo "Cloning dotfiles at ${DOTFILES_SHA}"; \
     git clone --depth=1 --recurse-submodules --shallow-submodules https://github.com/7ongOrz/dotfiles.git /root/dotfiles; \
     mkdir -p /root/.config; \
     ln -s /root/dotfiles/nvim /root/.config/nvim; \
