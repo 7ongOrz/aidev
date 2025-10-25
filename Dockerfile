@@ -73,16 +73,10 @@ RUN set -eux; \
     install -m 0755 ~/.fzf/bin/fzf /usr/local/bin/fzf; \
     rm -rf ~/.fzf
 
-# 当 npm 包有更新时自动破坏缓存
-ADD https://registry.npmjs.org/@openai/codex/latest /tmp/codex.json
-ADD https://registry.npmjs.org/@anthropic-ai/claude-code/latest /tmp/claude.json
 # 安装 Node.js（NodeSource 24.x）
 RUN set -eux; \
     curl -fsSL https://deb.nodesource.com/setup_24.x | bash -; \
     apt-get install -y --no-install-recommends nodejs; \
-    rm -f /tmp/*.json; \
-    npm install -g @openai/codex @anthropic-ai/claude-code; \
-    npm cache clean --force; \
     rm -rf /var/lib/apt/lists/*
 
 # 安装 bun（官方脚本，系统路径）
@@ -114,6 +108,14 @@ RUN set -eux; \
     mkdir -p /root/.config; \
     ln -s /root/dotfiles/nvim /root/.config/nvim; \
     ln -s /root/dotfiles/tmux /root/.config/tmux
+
+# 当 npm 包有更新时自动破坏缓存（放在最后以减少缓存失效影响）
+ADD https://registry.npmjs.org/@openai/codex/latest /tmp/codex.json
+ADD https://registry.npmjs.org/@anthropic-ai/claude-code/latest /tmp/claude.json
+RUN set -eux; \
+    rm -f /tmp/*.json; \
+    npm install -g @openai/codex @anthropic-ai/claude-code; \
+    npm cache clean --force
 
 COPY .vimrc /root/.vimrc
 COPY .zshrc /root/.zshrc
