@@ -109,7 +109,11 @@ RUN set -eux; \
     ln -s /root/dotfiles/nvim /root/.config/nvim; \
     ln -s /root/dotfiles/tmux /root/.config/tmux
 
-# 预装 Neovim 插件、Mason 工具和 TreeSitter parsers（镜像构建时完成，避免首次启动卡顿）
+# 预装 tmux 插件
+RUN set -eux; \
+    "${HOME}/.config/tmux/plugins/tpm/bin/install_plugins"
+
+# 预装 Neovim 插件、Mason 工具和 TreeSitter parsers
 RUN set -eux; \
     nvim --headless "+Lazy! sync" +qa; \
     nvim --headless "+MasonToolsInstallSync" +qa; \
