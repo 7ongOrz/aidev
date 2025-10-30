@@ -113,9 +113,10 @@ RUN set -eux; \
 RUN set -eux; \
     "${HOME}/.config/tmux/plugins/tpm/bin/install_plugins"
 
-# 预装 Neovim 插件、Mason 工具和 TreeSitter parsers
+# 预装 Neovim 插件和 TreeSitter parsers
+# Mason tools will auto-install on first container startup
 RUN set -eux; \
-    nvim --headless "+AstroUpdate" "+30sleep" +qa >/dev/null; \
+    DOCKER_BUILD=1 nvim --headless "+Lazy! sync" +qa >/dev/null; \
     rm -rf "${HOME}/.cache/nvim" "${HOME}/.local/state/nvim"
 
 # 当 npm 包有更新时自动破坏缓存（放在最后以减少缓存失效影响）
