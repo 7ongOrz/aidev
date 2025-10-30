@@ -117,7 +117,6 @@ RUN set -eux; \
 RUN set -eux; \
     nvim --headless "+Lazy! sync" +qa >/dev/null; \
     nvim --headless "+MasonToolsInstallSync" +qa >/dev/null; \
-    nvim --headless "+TSUpdateSync" +qa >/dev/null; \
     rm -rf "${HOME}/.cache/nvim" "${HOME}/.local/state/nvim"
 
 # 当 npm 包有更新时自动破坏缓存（放在最后以减少缓存失效影响）
