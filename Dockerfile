@@ -116,6 +116,7 @@ RUN set -eux; \
 # 预装 Neovim 插件、Mason 工具和 TreeSitter parsers
 RUN set -eux; \
     nvim --headless "+Lazy! sync" +qa >/dev/null; \
+    sleep 2; \
     nvim --headless "+MasonToolsInstallSync" +qa >/dev/null; \
     rm -rf "${HOME}/.cache/nvim" "${HOME}/.local/state/nvim"
 
