@@ -115,8 +115,7 @@ RUN set -eux; \
 
 # 预装 Neovim 插件、Mason 工具和 TreeSitter parsers
 RUN set -eux; \
-    nvim --headless "+Lazy! sync" +qa >/dev/null && \
-    nvim --headless "+30sleep" +qa >/dev/null; \
+    nvim --headless "+Lazy! sync" "+30sleep" +qa >/dev/null; \
     rm -rf "${HOME}/.cache/nvim" "${HOME}/.local/state/nvim"
 
 # 当 npm 包有更新时自动破坏缓存（放在最后以减少缓存失效影响）
