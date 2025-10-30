@@ -109,6 +109,13 @@ RUN set -eux; \
     ln -s /root/dotfiles/nvim /root/.config/nvim; \
     ln -s /root/dotfiles/tmux /root/.config/tmux
 
+# 预装 Neovim 插件、Mason 工具和 TreeSitter parsers（镜像构建时完成，避免首次启动卡顿）
+RUN set -eux; \
+    nvim --headless "+Lazy! sync" +qa; \
+    nvim --headless "+MasonToolsInstallSync" +qa; \
+    nvim --headless "+TSUpdateSync" +qa; \
+    rm -rf "${HOME}/.cache/nvim" "${HOME}/.local/state/nvim"
+
 # 当 npm 包有更新时自动破坏缓存（放在最后以减少缓存失效影响）
 ADD https://registry.npmjs.org/@openai/codex/latest /tmp/codex.json
 ADD https://registry.npmjs.org/@anthropic-ai/claude-code/latest /tmp/claude.json
