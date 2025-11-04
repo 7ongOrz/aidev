@@ -73,6 +73,15 @@ RUN set -eux; \
     install -m 0755 ~/.fzf/bin/fzf /usr/local/bin/fzf; \
     rm -rf ~/.fzf
 
+# 安装 lazygit（最新版）
+RUN set -eux; \
+    LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*'); \
+    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_linux_x86_64.tar.gz"; \
+    tar xf lazygit.tar.gz lazygit; \
+    install lazygit /usr/local/bin; \
+    rm lazygit lazygit.tar.gz; \
+    lazygit --version
+
 # 安装 Node.js（NodeSource 24.x）
 RUN set -eux; \
     curl -fsSL https://deb.nodesource.com/setup_24.x | bash -; \
