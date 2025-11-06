@@ -82,6 +82,17 @@ RUN set -eux; \
     rm lazygit lazygit.tar.gz; \
     lazygit --version
 
+# 安装 .NET 8 SDK
+RUN set -eux; \
+    wget https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb; \
+    dpkg -i packages-microsoft-prod.deb; \
+    rm packages-microsoft-prod.deb; \
+    apt-get update; \
+    apt-get install -y --no-install-recommends dotnet-sdk-8.0; \
+    apt-get clean; \
+    rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*; \
+    dotnet --version
+
 # 安装 Node.js（NodeSource 24.x）
 RUN set -eux; \
     curl -fsSL https://deb.nodesource.com/setup_24.x | bash -; \
