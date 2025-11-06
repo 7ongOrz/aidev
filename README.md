@@ -4,7 +4,7 @@
 
 ## 特性
 - 基础镜像：Ubuntu 24.04 (noble)，默认中文环境 `zh_CN.UTF-8`。
-- 包管理：APT（`ripgrep`/`bat`/`zoxide`/`zsh-plugins` 等）、NodeSource（Node 24/npm）、官方脚本（bun、nexttrace、fzf）。
+- 包管理：APT（`ripgrep`/`bat`/`zoxide`/`zsh-plugins` 等）、NodeSource（Node 24/npm）、官方脚本（bun、nexttrace、fzf、lazygit）。
 - 编辑器：内置最新版 Neovim（Tarball），配置 AstroNvim，包含 Mason 所需运行时（Python）。
 - 终端复用器：tmux，配置文件来自个人 dotfiles。
 - Shell：默认进入 zsh（Oh My Zsh 在 root 下启用，常用插件与别名已配置）。
@@ -44,6 +44,7 @@
   - yq：APT 安装，YAML 处理工具
   - zoxide：APT 安装，Oh My Zsh 插件启用
   - fzf：官方脚本安装，Oh My Zsh 插件启用
+  - lazygit：官方最新版安装，终端 Git UI 工具
   - bun：官方脚本安装并放到 `/usr/local/bin/bun`
   - nexttrace：官方一键脚本安装
 
