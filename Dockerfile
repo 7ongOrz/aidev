@@ -73,10 +73,16 @@ RUN set -eux; \
     install -m 0755 ~/.fzf/bin/fzf /usr/local/bin/fzf; \
     rm -rf ~/.fzf
 
-# 安装 lazygit（最新版）
+# 安装 lazygit（最新版，支持多架构）
+ARG TARGETARCH
 RUN set -eux; \
     LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*'); \
-    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_linux_x86_64.tar.gz"; \
+    case "${TARGETARCH}" in \
+        amd64) ARCH="x86_64" ;; \
+        arm64) ARCH="arm64" ;; \
+        *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
+    esac; \
+    curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/v${LAZYGIT_VERSION}/lazygit_${LAZYGIT_VERSION}_Linux_${ARCH}.tar.gz"; \
     tar xf lazygit.tar.gz lazygit; \
     install lazygit /usr/local/bin; \
     rm lazygit lazygit.tar.gz; \
@@ -111,11 +117,16 @@ RUN set -eux; \
     curl -sL nxtrace.org/nt | bash; \
     nexttrace --version
 
-# 安装 Neovim 最新版（Tarball）
+# 安装 Neovim 最新版（Tarball，支持多架构）
 RUN set -eux; \
-    curl -L https://github.com/neovim/neovim/releases/download/stable/nvim-linux-x86_64.tar.gz \
+    case "${TARGETARCH}" in \
+        amd64) ARCH="x86_64" ;; \
+        arm64) ARCH="arm64" ;; \
+        *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
+    esac; \
+    curl -L "https://github.com/neovim/neovim/releases/download/stable/nvim-linux-${ARCH}.tar.gz" \
         | tar -C /opt -xz; \
-    ln -s /opt/nvim-linux-x86_64/bin/nvim /usr/local/bin/nvim; \
+    ln -s "/opt/nvim-linux-${ARCH}/bin/nvim" /usr/local/bin/nvim; \
     nvim --version
 
 # 当 dotfiles 有更新时自动破坏缓存
