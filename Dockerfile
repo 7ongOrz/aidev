@@ -146,8 +146,8 @@ RUN set -eux; \
 
 # 预装 Neovim 插件、Mason 工具和 TreeSitter parsers
 RUN set -eux; \
-    DOCKER_BUILD=1 nvim --headless "+Lazy! sync" +qa >/dev/null && \
-    nvim --headless "+Lazy! load mason-tool-installer.nvim" "+MasonInstallAll" +qa >/dev/null; \
+    DOCKER_BUILD=1 nvim --headless "+Lazy! sync" +qa && \
+    nvim --headless "+Lazy! load mason-tool-installer.nvim" "+MasonInstallAll" +qa; \
     rm -rf "${HOME}/.cache/nvim" "${HOME}/.local/state/nvim"
 
 # 当 npm 包有更新时自动破坏缓存（放在最后以减少缓存失效影响）
