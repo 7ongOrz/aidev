@@ -6,7 +6,8 @@ ENV TZ=Asia/Shanghai \
     LANG=zh_CN.UTF-8 \
     LANGUAGE=zh_CN:zh \
     LC_ALL=zh_CN.UTF-8 \
-    TERM=xterm-256color
+    TERM=xterm-256color \
+    PATH="/root/.dotnet/tools:${PATH}"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -98,7 +99,9 @@ RUN set -eux; \
     apt-get install -y --no-install-recommends dotnet-sdk-8.0; \
     apt-get clean; \
     rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*; \
-    dotnet --version
+    dotnet --version; \
+    dotnet tool install -g ilspycmd; \
+    ilspycmd --version
 
 # 安装 Node.js（NodeSource 24.x）
 RUN set -eux; \
