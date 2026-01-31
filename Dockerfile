@@ -7,7 +7,7 @@ ENV TZ=Asia/Shanghai \
     LANGUAGE=zh_CN:zh \
     LC_ALL=zh_CN.UTF-8 \
     TERM=xterm-256color \
-    PATH="/root/.local/bin:/root/.dotnet/tools:${PATH}"
+    PATH="/root/.dotnet/tools:${PATH}"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -156,13 +156,11 @@ RUN set -eux; \
 
 # 当 npm 包有更新时自动破坏缓存（放在最后以减少缓存失效影响）
 ADD https://registry.npmjs.org/@openai/codex/latest /tmp/codex.json
-ADD https://api.github.com/repos/anthropics/claude-code/releases/latest /tmp/claude-version.json
+ADD https://registry.npmjs.org/@anthropic-ai/claude-code/latest /tmp/claude.json
 RUN set -eux; \
     rm -f /tmp/*.json; \
-    npm install -g @openai/codex; \
-    npm cache clean --force; \
-    curl -fsSL https://claude.ai/install.sh | bash; \
-    ~/.local/bin/claude --version
+    npm install -g @openai/codex @anthropic-ai/claude-code; \
+    npm cache clean --force
 
 COPY .vimrc /root/.vimrc
 COPY .zshrc /root/.zshrc
