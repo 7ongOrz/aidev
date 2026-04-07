@@ -78,6 +78,19 @@ RUN set -eux; \
 # 安装 lazygit（最新版，支持多架构）
 ARG TARGETARCH
 RUN set -eux; \
+    case "${TARGETARCH}" in \
+        amd64) CC_SWITCH_ASSET="cc-switch-cli-linux-x64.tar.gz" ;; \
+        arm64) CC_SWITCH_ASSET="cc-switch-cli-linux-arm64.tar.gz" ;; \
+        *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
+    esac; \
+    curl -L "https://github.com/saladday/cc-switch-cli/releases/latest/download/${CC_SWITCH_ASSET}" \
+        -o /tmp/cc-switch.tar.gz; \
+    tar -xzf /tmp/cc-switch.tar.gz -C /tmp cc-switch; \
+    install -m 0755 /tmp/cc-switch /usr/local/bin/cc-switch; \
+    rm -f /tmp/cc-switch /tmp/cc-switch.tar.gz; \
+    cc-switch --version
+
+RUN set -eux; \
     LAZYGIT_VERSION=$(curl -s "https://api.github.com/repos/jesseduffield/lazygit/releases/latest" | grep -Po '"tag_name": "v\K[^"]*'); \
     case "${TARGETARCH}" in \
         amd64) ARCH="x86_64" ;; \
