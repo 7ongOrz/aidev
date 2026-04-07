@@ -113,7 +113,7 @@ RUN set -eux; \
     apt-get clean; \
     rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*; \
     dotnet --version; \
-    dotnet tool install -g ilspycmd; \
+    dotnet tool install -g ilspycmd --version 9.*; \
     ilspycmd --version
 
 # 安装 Node.js（NodeSource 24.x）
