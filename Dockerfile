@@ -7,7 +7,7 @@ ENV TZ=Asia/Shanghai \
     LANGUAGE=zh_CN:zh \
     LC_ALL=zh_CN.UTF-8 \
     TERM=xterm-256color \
-    PATH="/root/.dotnet/tools:${PATH}"
+    PATH="/root/.cargo/bin:/root/.dotnet/tools:${PATH}"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -108,6 +108,14 @@ RUN set -eux; \
     curl -fsSL https://deb.nodesource.com/setup_24.x | bash -; \
     apt-get install -y --no-install-recommends nodejs; \
     rm -rf /var/lib/apt/lists/*
+
+# 安装 Rust（stable + nightly，wasm32 target）
+RUN set -eux; \
+    curl -fsSL https://sh.rustup.rs | sh -s -- -y --no-modify-path --default-toolchain stable --profile minimal; \
+    rustup toolchain install nightly --profile minimal; \
+    rustup target add wasm32-unknown-unknown --toolchain nightly; \
+    rustc --version; \
+    cargo --version
 
 # 安装 bun（官方脚本，系统路径）
 ENV BUN_INSTALL=/usr/local/bun
