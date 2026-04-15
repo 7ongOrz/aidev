@@ -42,6 +42,7 @@ RUN set -eux; \
         htop \
         jq \
         yq \
+        gh \
         git-lfs \
         p7zip-full \
         tree \
