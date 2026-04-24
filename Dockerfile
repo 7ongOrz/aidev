@@ -38,6 +38,7 @@ RUN set -eux; \
         traceroute \
         iputils-ping \
         bind9-dnsutils \
+        bubblewrap \
         mtr-tiny \
         htop \
         jq \
