@@ -1,3 +1,7 @@
+ARG GO_VERSION=1.26
+
+FROM golang:${GO_VERSION}-bookworm AS go-toolchain
+
 FROM ubuntu:noble
 
 ARG DEBIAN_FRONTEND=noninteractive
@@ -7,9 +11,11 @@ ENV TZ=Asia/Shanghai \
     LANGUAGE=zh_CN:zh \
     LC_ALL=zh_CN.UTF-8 \
     TERM=xterm-256color \
-    PATH="/root/.cargo/bin:/root/.dotnet/tools:${PATH}"
+    PATH="/usr/local/go/bin:/root/.cargo/bin:/root/.dotnet/tools:${PATH}"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+COPY --from=go-toolchain /usr/local/go /usr/local/go
 
 # 基础依赖 + 常用工具（APT）
 RUN set -eux; \
