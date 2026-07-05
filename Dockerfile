@@ -6,10 +6,10 @@ FROM ubuntu:noble
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV TZ=Asia/Shanghai \
-    LANG=zh_CN.UTF-8 \
-    LANGUAGE=zh_CN:zh \
-    LC_ALL=zh_CN.UTF-8 \
+ENV TZ=America/New_York \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US:en \
+    LC_ALL=en_US.UTF-8 \
     TERM=xterm-256color \
     PATH="/usr/local/go/bin:/root/.cargo/bin:/root/.dotnet/tools:${PATH}"
 
@@ -65,9 +65,11 @@ RUN set -eux; \
         zsh-syntax-highlighting \
         zoxide \
         xclip; \
-    sed -i 's/# zh_CN.UTF-8 UTF-8/zh_CN.UTF-8 UTF-8/' /etc/locale.gen; \
-    locale-gen zh_CN.UTF-8; \
-    update-locale LANG=zh_CN.UTF-8 LC_ALL=zh_CN.UTF-8; \
+    ln -snf "/usr/share/zoneinfo/${TZ}" /etc/localtime; \
+    echo "${TZ}" > /etc/timezone; \
+    sed -i 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen; \
+    locale-gen en_US.UTF-8; \
+    update-locale LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8; \
     apt-get clean; \
     rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
