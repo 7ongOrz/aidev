@@ -9,7 +9,7 @@
 - 终端复用器：tmux，配置文件来自个人 dotfiles。
 - Shell：默认进入 zsh（Oh My Zsh 在 root 下启用，常用插件与别名已配置）。
 - 构建发布：支持本地构建，也可用 GitHub Actions 推送到 GHCR 以便拉取。
-- 额外 CLI：全局安装 `@openai/codex` 与 `@anthropic-ai/claude-code`。
+- 额外 CLI：全局安装 `@openai/codex`、`@anthropic-ai/claude-code` 与 `zcode-app-cli`。
 
 ## 主要文件
 - `Dockerfile`：镜像定义（无代理、无字体）。

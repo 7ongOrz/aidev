@@ -189,9 +189,10 @@ RUN set -eux; \
 # 当 npm 包有更新时自动破坏缓存（放在最后以减少缓存失效影响）
 ADD https://registry.npmjs.org/@openai/codex/latest /tmp/codex.json
 ADD https://registry.npmjs.org/@anthropic-ai/claude-code/latest /tmp/claude.json
+ADD https://registry.npmjs.org/zcode-app-cli/latest /tmp/zcode.json
 RUN set -eux; \
     rm -f /tmp/*.json; \
-    npm install -g @openai/codex @anthropic-ai/claude-code; \
+    npm install -g @openai/codex @anthropic-ai/claude-code zcode-app-cli; \
     npm cache clean --force
 
 COPY .vimrc /root/.vimrc
