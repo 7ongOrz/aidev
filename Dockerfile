@@ -168,8 +168,12 @@ RUN set -eux; \
 
 # 预装 Neovim 插件、Mason 工具和 TreeSitter parsers
 RUN set -eux; \
-    DOCKER_BUILD=1 nvim --headless "+Lazy! sync" +qa >/dev/null && \
-    nvim --headless "+Lazy! load mason-tool-installer.nvim" "+MasonInstallAll" +qa >/dev/null; \
+    export DOCKER_BUILD=1; \
+    nvim --headless "+Lazy! sync" +qa; \
+    nvim --headless "+Lazy! load mason-tool-installer.nvim" "+MasonInstallAll" +qa; \
+    nvim --headless \
+        '+lua assert(require("nvim-treesitter").install(require("astrocore").config.treesitter.ensure_installed):wait(300000)); vim.cmd("qa")' \
+        +cquit; \
     rm -rf "${HOME}/.cache/nvim" "${HOME}/.local/state/nvim"
 
 # 安装 cc-switch-cli（官方预编译二进制，支持多架构）
