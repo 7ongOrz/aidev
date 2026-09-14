@@ -6,7 +6,7 @@
 - 基础镜像：Ubuntu 24.04 (noble)，默认美国英文环境 `en_US.UTF-8`，时区 `America/New_York`。
 - 包管理：APT（`ripgrep`/`bat`/`zoxide`/`zsh-plugins` 等）、NodeSource（Node 24/npm）、官方脚本（bun、nexttrace、fzf、lazygit）。
 - 编辑器：内置最新版 Neovim（Tarball），配置 AstroNvim，包含 Mason 所需运行时（Python）。
-- 终端复用器：tmux，配置文件来自个人 dotfiles。
+- 终端复用器：tmux（配置来自个人 dotfiles）与 Herdr（官方预编译二进制）。
 - Shell：默认进入 zsh（Oh My Zsh 在 root 下启用，常用插件与别名已配置）。
 - 构建发布：支持本地构建，也可用 GitHub Actions 推送到 GHCR 以便拉取。
 - 额外 CLI：全局安装 `@openai/codex`、`@anthropic-ai/claude-code` 与 `zcode-app-cli`。
@@ -38,6 +38,7 @@
   - 说明：`-l` 登录 shell，读登录文件；`-i` 交互，读 `.zshrc`；`-c` 执行字符串命令。
   - Neovim：配置位于 `~/.config/nvim`（AstroNvim），已安装 Mason 所需的 Python 运行时
   - tmux：配置位于 `~/.config/tmux`
+  - Herdr：运行 `herdr` 启动或重连；配置位于 `~/.config/herdr/config.toml`
   - 更新配置：`cd ~/dotfiles && git pull && git submodule update --remote`
   - Python：APT 安装 python3/pip/venv（支持 Mason 安装 Python 工具）
   - Node/npm：来自 NodeSource（Node 24.x）

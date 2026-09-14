@@ -1,0 +1,19 @@
+[keys]
+prefix = "ctrl+a"
+detach = "prefix+d"
+
+# Match tmux-pain-control; keep Herdr's split aliases too.
+split_vertical = ["prefix+|", "prefix+%", "prefix+v"]
+split_horizontal = ["prefix+minus", 'prefix+"']
+focus_pane_left = ["prefix+h", "prefix+ctrl+h"]
+focus_pane_down = ["prefix+j", "prefix+ctrl+j"]
+focus_pane_up = ["prefix+k", "prefix+ctrl+k"]
+focus_pane_right = ["prefix+l", "prefix+ctrl+l"]
+previous_tab = ["prefix+p", "prefix+ctrl+p"]
+next_tab = ["prefix+n", "prefix+ctrl+n"]
+move_tab_previous = "prefix+<"
+move_tab_next = "prefix+>"
+rename_tab = ["prefix+comma", "prefix+shift+t"]
+close_tab = ["prefix+ampersand", "prefix+shift+x"]
+cycle_pane_next = ["prefix+o", "prefix+tab"]
+open_notification_target = "prefix+alt+o"

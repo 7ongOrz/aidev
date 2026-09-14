@@ -172,6 +172,21 @@ RUN set -eux; \
     nvim --headless "+Lazy! load mason-tool-installer.nvim" "+MasonInstallAll" +qa >/dev/null; \
     rm -rf "${HOME}/.cache/nvim" "${HOME}/.local/state/nvim"
 
+# 安装 Herdr（官方预编译二进制，支持多架构）
+ADD https://api.github.com/repos/herdrdev/herdr/releases/latest /tmp/herdr-version.json
+RUN set -eux; \
+    HERDR_VERSION=$(jq -er '.tag_name' /tmp/herdr-version.json); \
+    case "${TARGETARCH}" in \
+        amd64) HERDR_ARCH="x86_64" ;; \
+        arm64) HERDR_ARCH="aarch64" ;; \
+        *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
+    esac; \
+    curl -fsSL "https://github.com/herdrdev/herdr/releases/download/${HERDR_VERSION}/herdr-linux-${HERDR_ARCH}" \
+        -o /tmp/herdr; \
+    install -m 0755 /tmp/herdr /usr/local/bin/herdr; \
+    rm -f /tmp/herdr /tmp/herdr-version.json; \
+    herdr --version
+
 # 安装 cc-switch-cli（官方预编译二进制，支持多架构）
 RUN set -eux; \
     case "${TARGETARCH}" in \
@@ -197,6 +212,7 @@ RUN set -eux; \
 
 COPY .vimrc /root/.vimrc
 COPY .zshrc /root/.zshrc
+COPY herdr.toml /root/.config/herdr/config.toml
 
 WORKDIR /root
 
