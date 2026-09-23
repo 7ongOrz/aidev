@@ -190,14 +190,53 @@ RUN set -eux; \
     rm -f /tmp/cc-switch /tmp/cc-switch.tar.gz; \
     cc-switch --version
 
-# 当 npm 包有更新时自动破坏缓存（放在最后以减少缓存失效影响）
+# AI CLI 分段安装，更新较频繁的包靠后，减少后续安装层缓存失效
+# 安装 Pi 本体（与插件分层）
+ADD https://registry.npmjs.org/@earendil-works/pi-coding-agent/latest /tmp/pi-agent.json
+RUN set -eux; \
+    rm -f /tmp/pi-agent.json; \
+    npm install -g --ignore-scripts @earendil-works/pi-coding-agent; \
+    pi --version; \
+    npm cache clean --force
+
+# 安装 Codex
 ADD https://registry.npmjs.org/@openai/codex/latest /tmp/codex.json
-ADD https://registry.npmjs.org/@anthropic-ai/claude-code/latest /tmp/claude.json
+RUN set -eux; \
+    rm -f /tmp/codex.json; \
+    npm install -g @openai/codex; \
+    npm cache clean --force
+
+# 安装 zcode
 ADD https://registry.npmjs.org/zcode-app-cli/latest /tmp/zcode.json
 RUN set -eux; \
-    rm -f /tmp/*.json; \
-    npm install -g @openai/codex @anthropic-ai/claude-code zcode-app-cli; \
+    rm -f /tmp/zcode.json; \
+    npm install -g zcode-app-cli; \
     npm cache clean --force
+
+# 安装 Pi 基础插件；任一插件更新时重新安装本段及后续层
+ADD https://registry.npmjs.org/pi-open-tui/latest /tmp/pi-open-tui.json
+ADD https://registry.npmjs.org/@juicesharp/rpiv-ask-user-question/latest /tmp/pi-ask-user-question.json
+ADD https://registry.npmjs.org/pi-web-access/latest /tmp/pi-web-access.json
+ADD https://registry.npmjs.org/pi-background-tasks/latest /tmp/pi-background-tasks.json
+RUN set -eux; \
+    rm -f /tmp/pi-open-tui.json /tmp/pi-ask-user-question.json \
+        /tmp/pi-web-access.json /tmp/pi-background-tasks.json; \
+    pi install npm:pi-open-tui; \
+    pi install npm:@juicesharp/rpiv-ask-user-question; \
+    pi install npm:pi-web-access; \
+    pi install npm:pi-background-tasks; \
+    pi list; \
+    npm cache clean --force
+
+# 安装 Claude Code（更新较频繁，放在其他 AI CLI 和 Pi 插件之后）
+ADD https://registry.npmjs.org/@anthropic-ai/claude-code/latest /tmp/claude.json
+RUN set -eux; \
+    rm -f /tmp/claude.json; \
+    npm install -g @anthropic-ai/claude-code; \
+    npm cache clean --force
+
+# 后台插件仅启用进程管理（命令、日志与完成通知）
+ENV PI_BG_FEATURES=process
 
 COPY .vimrc /root/.vimrc
 COPY .zshrc /root/.zshrc
