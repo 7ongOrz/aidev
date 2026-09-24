@@ -31,7 +31,13 @@
 
 ## Pi agent
 
-镜像仅安装 Pi 本体。运行容器时添加 `-v "$HOME/.pi:/root/.pi"`，持久化插件、配置和会话；重建容器时复用同一目录。
+Pi 本体安装命令（镜像已预装）：
+
+```bash
+npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+```
+
+运行容器时添加 `-v "$HOME/.pi:/root/.pi"`，持久化插件、配置和会话；重建容器时复用同一目录。
 
 首次在容器内安装插件：
 
