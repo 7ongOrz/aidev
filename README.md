@@ -46,6 +46,8 @@ pi install npm:pi-open-tui@latest
 pi install npm:@juicesharp/rpiv-ask-user-question@latest
 pi install npm:pi-web-access@latest
 pi install npm:pi-background-tasks@latest
+pi install npm:pi-mcp-adapter@latest
+pi install npm:pi-context-view@latest
 ```
 
 安装或更新插件后重启 Pi。进入项目目录运行 `pi`，通过 `/login` 配置模型服务，使用 `/model` 选择模型。
