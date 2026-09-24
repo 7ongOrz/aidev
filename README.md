@@ -11,7 +11,6 @@
 - Shell：默认进入 zsh（Oh My Zsh 在 root 下启用，常用插件与别名已配置）。
 - 构建发布：支持本地构建，也可用 GitHub Actions 推送到 GHCR 以便拉取。
 - 额外 CLI：全局安装 `@openai/codex`、`@anthropic-ai/claude-code`、`zcode-app-cli` 与 Pi（`@earendil-works/pi-coding-agent`）。
-- Pi 基础插件：预装 `pi-open-tui`、`@juicesharp/rpiv-ask-user-question`、`pi-web-access`、`pi-background-tasks`。
 
 ## 主要文件
 
@@ -32,22 +31,27 @@
 
 ## Pi agent
 
-构建时安装最新版 Pi 和上述 4 个插件。AI CLI 安装顺序为 Pi 本体 → Codex → zcode → Pi 插件 → Claude Code，各段通过 npm 版本元数据检测更新。只有 Pi 插件更新时，可复用前面的 Pi 本体、Codex 和 zcode 安装缓存，重新构建插件段及后续层；只有 Claude Code 更新时，可复用前面的所有安装层缓存。
+镜像仅安装 Pi 本体。运行容器时添加 `-v "$HOME/.pi:/root/.pi"`，持久化插件、配置和会话；重建容器时复用同一目录。
 
-进入项目目录后运行 `pi`，首次使用可通过 `/login` 配置模型服务，再用 `/model` 选择模型。
+首次在容器内安装插件：
+
+```bash
+pi install npm:pi-open-tui@latest
+pi install npm:@juicesharp/rpiv-ask-user-question@latest
+pi install npm:pi-web-access@latest
+pi install npm:pi-background-tasks@latest
+```
+
+安装或更新插件后重启 Pi。进入项目目录运行 `pi`，通过 `/login` 配置模型服务，使用 `/model` 选择模型。
 
 - `pi list`：查看已配置的插件。
 - `pi config`：管理加载的插件资源。
 - `pi update`：更新 Pi 本体。
-- `pi update --extensions`：更新插件。
+- `pi update --extensions`：更新插件，插件不随镜像自动更新。
 - `/open-tui`：在 Pi 内调整界面、设置语言和图标；终端图标显示异常时可选择 ASCII。
 - `/bg <命令>`：启动后台 shell 任务；用 `/jobs` 查看任务，`/logs <任务 ID>` 查看输出。
 
-插件安装及配置位于 `/root/.pi/agent`，会话和登录信息也保存在该目录。容器使用 `--rm` 时，如需保留这些数据，可添加 `-v pi-agent:/root/.pi/agent` 使用命名卷。首次使用空命名卷会复制镜像中的预装内容；已有卷会保留原有内容，需在容器内运行更新命令。直接绑定宿主机空目录会遮住镜像中的插件和配置，需要重新执行 `pi install`。
-
-`pi-web-access` 使用默认配置：浏览器 Cookie 访问关闭，搜索工作流为 `none`，不额外调用摘要模型。
-
-镜像通过 `ENV PI_BG_FEATURES=process` 将 `pi-background-tasks` 设为仅启用后台进程管理，保留后台命令、日志、状态、终止任务和完成通知，关闭其委派、Fusion、运行证明及 Anthropic attribution 功能。直接运行 `pi` 即生效，zsh 和非交互启动均继承此设置。该开关不限制任务的内存或并发。`pi-subagents`、LSP 及其他可选插件暂不预装。
+镜像设置 `PI_BG_FEATURES=process`，安装 `pi-background-tasks` 后仅启用后台进程管理。
 
 安装和管理方式见 [Pi 官方快速开始](https://pi.dev/docs/latest/quickstart)及[包管理文档](https://pi.dev/docs/latest/packages)。
 
