@@ -37,7 +37,7 @@ Pi 本体安装命令（镜像已预装）：
 npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 ```
 
-运行容器时添加 `-v "$HOME/.pi:/root/.pi"`，持久化插件、配置和会话；重建容器时复用同一目录。
+运行容器时添加 `-v "$HOME/.pi:/root/.pi"`，持久化插件、配置、技能和会话；重建容器时复用同一目录。
 
 首次在容器内安装插件：
 
@@ -48,6 +48,7 @@ pi install npm:pi-web-access@latest
 pi install npm:pi-background-tasks@latest
 pi install npm:pi-mcp-adapter@latest
 pi install npm:pi-context-view@latest
+pi install npm:@upstash/context7-pi@latest
 ```
 
 安装或更新插件后重启 Pi。进入项目目录运行 `pi`，通过 `/login` 配置模型服务，使用 `/model` 选择模型。
@@ -60,6 +61,10 @@ pi install npm:pi-context-view@latest
 - `/bg <命令>`：启动后台 shell 任务；用 `/jobs` 查看任务，`/logs <任务 ID>` 查看输出。
 
 镜像设置 `PI_BG_FEATURES=process`，安装 `pi-background-tasks` 后仅启用后台进程管理。
+
+Context7 插件免配置可用（按 IP 限速）；如需更高额度，在 `~/.zshenv` 中 `export CONTEXT7_API_KEY=<key>`（key 在 context7.com/dashboard 生成）。
+
+技能放在 `~/.pi/agent/skills/<名称>/SKILL.md`，随挂载卷持久化。
 
 安装和管理方式见 [Pi 官方快速开始](https://pi.dev/docs/latest/quickstart)及[包管理文档](https://pi.dev/docs/latest/packages)。
 
