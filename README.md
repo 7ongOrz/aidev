@@ -49,6 +49,8 @@ pi install npm:pi-background-tasks@latest
 pi install npm:pi-mcp-adapter@latest
 pi install npm:pi-context-view@latest
 pi install npm:@upstash/context7-pi@latest
+pi install npm:pi-memory@latest
+pi install npm:pi-subagents@latest
 ```
 
 安装或更新插件后重启 Pi。进入项目目录运行 `pi`，通过 `/login` 配置模型服务，使用 `/model` 选择模型。
