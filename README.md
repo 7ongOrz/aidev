@@ -4,7 +4,7 @@
 
 ## 特性
 
-- 基础镜像：Ubuntu 24.04 (noble)，默认美国英文环境 `en_US.UTF-8`，时区 `America/New_York`。
+- 基础镜像：Ubuntu 24.04 (noble)，默认美国英文环境 `en_US.UTF-8`，时区 `America/Los_Angeles`。
 - 包管理：APT（`ripgrep`/`bat`/`zoxide`/`zsh-plugins` 等）、NodeSource（Node 24/npm）、官方脚本（bun、nexttrace、fzf、lazygit）。
 - 编辑器：内置最新版 Neovim（Tarball），配置 AstroNvim，包含 Mason 所需运行时（Python）。
 - 终端复用器：tmux，配置文件来自个人 dotfiles。

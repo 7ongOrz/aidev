@@ -6,7 +6,7 @@ FROM ubuntu:noble
 
 ARG DEBIAN_FRONTEND=noninteractive
 
-ENV TZ=America/New_York \
+ENV TZ=America/Los_Angeles \
     LANG=en_US.UTF-8 \
     LANGUAGE=en_US:en \
     LC_ALL=en_US.UTF-8 \
