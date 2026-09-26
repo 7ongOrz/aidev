@@ -43,15 +43,16 @@ npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 首次在容器内安装插件：
 
 ```bash
-pi install npm:pi-open-tui@latest
-pi install npm:@juicesharp/rpiv-ask-user-question@latest
-pi install npm:pi-web-access@latest
-pi install npm:pi-background-tasks@latest
-pi install npm:pi-mcp-adapter@latest
-pi install npm:pi-context-view@latest
-pi install npm:@upstash/context7-pi@latest
-pi install npm:pi-memory@latest
-pi install npm:pi-subagents@latest
+pi install npm:pi-open-tui
+pi install npm:@juicesharp/rpiv-ask-user-question
+pi install npm:pi-web-access
+pi install npm:pi-background-tasks
+pi install npm:pi-mcp-adapter
+pi install npm:pi-context-view
+pi install npm:@narumitw/pi-usage
+pi install npm:@upstash/context7-pi
+pi install npm:pi-memory
+pi install npm:pi-subagents
 ```
 
 安装或更新插件后重启 Pi。进入项目目录运行 `pi`，通过 `/login` 配置模型服务，使用 `/model` 选择模型。
