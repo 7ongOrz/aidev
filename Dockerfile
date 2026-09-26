@@ -11,7 +11,7 @@ ENV TZ=America/Los_Angeles \
     LANGUAGE=en_US:en \
     LC_ALL=en_US.UTF-8 \
     TERM=xterm-256color \
-    PATH="/usr/local/go/bin:/root/.cargo/bin:/root/.dotnet/tools:${PATH}"
+    PATH="/usr/local/go/bin:/root/.cargo/bin:${PATH}"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
@@ -100,30 +100,16 @@ RUN set -eux; \
     rm lazygit lazygit.tar.gz; \
     lazygit --version
 
-# 安装 .NET 8 SDK
-RUN set -eux; \
-    wget https://packages.microsoft.com/config/ubuntu/24.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb; \
-    dpkg -i packages-microsoft-prod.deb; \
-    rm packages-microsoft-prod.deb; \
-    apt-get update; \
-    apt-get install -y --no-install-recommends dotnet-sdk-8.0; \
-    apt-get clean; \
-    rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*; \
-    dotnet --version; \
-    dotnet tool install -g ilspycmd --version 9.*; \
-    ilspycmd --version
-
 # 安装 Node.js（NodeSource 24.x）
 RUN set -eux; \
     curl -fsSL https://deb.nodesource.com/setup_24.x | bash -; \
     apt-get install -y --no-install-recommends nodejs; \
     rm -rf /var/lib/apt/lists/*
 
-# 安装 Rust（stable + nightly，wasm32 target）
+# 安装 Rust（stable + wasm32 target）
 RUN set -eux; \
     curl -fsSL https://sh.rustup.rs | sh -s -- -y --no-modify-path --default-toolchain stable --profile minimal; \
-    rustup toolchain install nightly --profile minimal; \
-    rustup target add wasm32-unknown-unknown --toolchain nightly; \
+    rustup target add wasm32-unknown-unknown --toolchain stable; \
     rustc --version; \
     cargo --version
 
