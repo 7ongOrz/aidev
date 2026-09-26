@@ -64,7 +64,7 @@ pi install npm:pi-subagents@latest
 
 镜像设置 `PI_BG_FEATURES=process`，安装 `pi-background-tasks` 后仅启用后台进程管理。
 
-Context7 插件免配置可用（按 IP 限速）；如需更高额度，在 `~/.zshenv` 中 `export CONTEXT7_API_KEY=<key>`（key 在 context7.com/dashboard 生成）。
+Context7 插件无需配置 API Key 即可使用（按 IP 限速）；如需更高额度，可在 [Context7 控制台](https://context7.com/dashboard)生成 Key，并设置环境变量 `CONTEXT7_API_KEY`。Docker 中可将 `CONTEXT7_API_KEY=<key>` 保存到宿主机文件，创建或重建容器时通过 `--env-file <宿主机文件路径>` 传入。
 
 技能放在 `~/.pi/agent/skills/<名称>/SKILL.md`，随挂载卷持久化。
 
