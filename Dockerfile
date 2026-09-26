@@ -160,6 +160,7 @@ RUN set -eux; \
     nvim --headless \
         '+lua assert(require("nvim-treesitter").install(require("astrocore").config.treesitter.ensure_installed):wait(300000)); vim.cmd("qa")' \
         +cquit; \
+    npm cache clean --force; \
     rm -rf "${HOME}/.cache/nvim" "${HOME}/.local/state/nvim"
 
 # 安装 cc-switch-cli（官方预编译二进制，支持多架构）
