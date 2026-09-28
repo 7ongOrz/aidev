@@ -111,3 +111,5 @@ alias bat=batcat
 
 alias bunx='bun x'
 alias ll='ls -alh'
+
+export PI_MEMORY_EXIT_SUMMARY=0
