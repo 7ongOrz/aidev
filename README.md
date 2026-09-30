@@ -47,7 +47,6 @@ pi install npm:pi-open-tui
 pi install npm:@juicesharp/rpiv-ask-user-question
 pi install npm:pi-web-access
 pi install npm:pi-background-tasks
-pi install npm:pi-mcp-adapter
 pi install npm:pi-context-view
 pi install npm:@narumitw/pi-usage
 pi install npm:@upstash/context7-pi
