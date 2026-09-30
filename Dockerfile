@@ -11,6 +11,7 @@ ENV TZ=America/Los_Angeles \
     LANGUAGE=en_US:en \
     LC_ALL=en_US.UTF-8 \
     TERM=xterm-256color \
+    COLORTERM=truecolor \
     PATH="/usr/local/go/bin:/root/.cargo/bin:${PATH}"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
