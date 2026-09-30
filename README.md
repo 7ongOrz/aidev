@@ -51,7 +51,6 @@ pi install npm:pi-context-view
 pi install npm:@narumitw/pi-usage
 pi install npm:@upstash/context7-pi
 pi install npm:pi-memory
-pi install npm:pi-subagents
 ```
 
 安装或更新插件后重启 Pi。进入项目目录运行 `pi`，通过 `/login` 配置模型服务，使用 `/model` 选择模型。
