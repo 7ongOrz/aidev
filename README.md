@@ -6,7 +6,8 @@
 
 - 基础镜像：Ubuntu 24.04 (noble)，默认美国英文环境 `en_US.UTF-8`，时区 `America/Los_Angeles`。
 - 包管理：APT（`ripgrep`/`bat`/`zoxide`/`zsh-plugins` 等）、NodeSource（Node 24/npm）、官方脚本（bun、nexttrace、fzf、lazygit）。
-- Rust：预装 stable 最小工具链及 `wasm32-unknown-unknown` 编译目标。
+- Rust：预装最新 stable 最小工具链及 `wasm32-unknown-unknown` 编译目标。
+- Go：从官方镜像预装最新稳定版。
 - 编辑器：内置最新版 Neovim（Tarball），配置 AstroNvim，包含 Mason 所需运行时（Python）。
 - 终端复用器：tmux，配置文件来自个人 dotfiles。
 - Shell：默认进入 zsh（Oh My Zsh 在 root 下启用，常用插件与别名已配置）。
@@ -22,7 +23,7 @@
 
 ## 本地构建与运行
 
-- 构建：`docker build -t <repo>:latest .`
+- 构建：`docker build --pull -t <repo>:latest .`
 - 进入：`docker run -it --rm <repo>:latest`（默认 zsh，工作目录为 `~`）
 - 挂载本地目录：`docker run -it --rm -v $(pwd):/workspace <repo>:latest`
 - 指定 bash：`docker run -it --rm --entrypoint /bin/bash <repo>:latest`

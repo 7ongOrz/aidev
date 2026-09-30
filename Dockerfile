@@ -1,6 +1,4 @@
-ARG GO_VERSION=1.26
-
-FROM golang:${GO_VERSION}-bookworm AS go-toolchain
+FROM golang:bookworm AS go-toolchain
 
 FROM ubuntu:noble
 
@@ -15,8 +13,6 @@ ENV TZ=America/Los_Angeles \
     PATH="/usr/local/go/bin:/root/.cargo/bin:${PATH}"
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
-COPY --from=go-toolchain /usr/local/go /usr/local/go
 
 # 基础依赖 + 常用工具（APT）
 RUN set -eux; \
@@ -79,13 +75,6 @@ RUN set -eux; \
     export ZSH="/root/.oh-my-zsh"; \
     git clone --depth=1 --single-branch https://github.com/ohmyzsh/ohmyzsh.git "$ZSH"
 
-# 安装 fzf（官方脚本，安装后清理缓存）
-RUN set -eux; \
-    git clone --depth 1 --single-branch https://github.com/junegunn/fzf.git ~/.fzf; \
-    ~/.fzf/install --bin --no-update-rc; \
-    install -m 0755 ~/.fzf/bin/fzf /usr/local/bin/fzf; \
-    rm -rf ~/.fzf
-
 # 安装 lazygit（最新版，支持多架构）
 ARG TARGETARCH
 RUN set -eux; \
@@ -106,13 +95,6 @@ RUN set -eux; \
     curl -fsSL https://deb.nodesource.com/setup_24.x | bash -; \
     apt-get install -y --no-install-recommends nodejs; \
     rm -rf /var/lib/apt/lists/*
-
-# 安装 Rust（stable + wasm32 target）
-RUN set -eux; \
-    curl -fsSL https://sh.rustup.rs | sh -s -- -y --no-modify-path --default-toolchain stable --profile minimal; \
-    rustup target add wasm32-unknown-unknown --toolchain stable; \
-    rustc --version; \
-    cargo --version
 
 # 安装 bun（官方脚本，系统路径）
 ENV BUN_INSTALL=/usr/local/bun
@@ -137,6 +119,40 @@ RUN set -eux; \
         | tar -C /opt -xz; \
     ln -s "/opt/nvim-linux-${ARCH}/bin/nvim" /usr/local/bin/nvim; \
     nvim --version
+
+# 安装 cc-switch-cli（官方预编译二进制，支持多架构）
+RUN set -eux; \
+    case "${TARGETARCH}" in \
+        amd64) CC_SWITCH_ASSET="cc-switch-cli-linux-x64.tar.gz" ;; \
+        arm64) CC_SWITCH_ASSET="cc-switch-cli-linux-arm64.tar.gz" ;; \
+        *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
+    esac; \
+    curl -L "https://github.com/saladday/cc-switch-cli/releases/latest/download/${CC_SWITCH_ASSET}" \
+        -o /tmp/cc-switch.tar.gz; \
+    tar -xzf /tmp/cc-switch.tar.gz -C /tmp cc-switch; \
+    install -m 0755 /tmp/cc-switch /usr/local/bin/cc-switch; \
+    rm -f /tmp/cc-switch /tmp/cc-switch.tar.gz; \
+    cc-switch --version
+
+# 安装 Rust（stable + wasm32 target）
+ADD https://static.rust-lang.org/dist/channel-rust-stable.toml.sha256 /tmp/rust-stable.sha256
+RUN set -eux; \
+    rm -f /tmp/rust-stable.sha256; \
+    curl -fsSL https://sh.rustup.rs | sh -s -- -y --no-modify-path --default-toolchain stable --profile minimal; \
+    rustup target add wasm32-unknown-unknown --toolchain stable; \
+    rustc --version; \
+    cargo --version
+
+# 安装 Go（官方最新稳定版，支持多架构）
+COPY --from=go-toolchain /usr/local/go /usr/local/go
+RUN go version
+
+# 安装 fzf（官方脚本，安装后清理缓存）
+RUN set -eux; \
+    git clone --depth 1 --single-branch https://github.com/junegunn/fzf.git ~/.fzf; \
+    ~/.fzf/install --bin --no-update-rc; \
+    install -m 0755 ~/.fzf/bin/fzf /usr/local/bin/fzf; \
+    rm -rf ~/.fzf
 
 # 当 dotfiles 有更新时自动破坏缓存
 ADD https://api.github.com/repos/7ongOrz/dotfiles/commits?sha=main&per_page=1 /tmp/dotfiles-version.json
@@ -164,20 +180,6 @@ RUN set -eux; \
     npm cache clean --force; \
     rm -rf "${HOME}/.cache/nvim" "${HOME}/.local/state/nvim"
 
-# 安装 cc-switch-cli（官方预编译二进制，支持多架构）
-RUN set -eux; \
-    case "${TARGETARCH}" in \
-        amd64) CC_SWITCH_ASSET="cc-switch-cli-linux-x64.tar.gz" ;; \
-        arm64) CC_SWITCH_ASSET="cc-switch-cli-linux-arm64.tar.gz" ;; \
-        *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
-    esac; \
-    curl -L "https://github.com/saladday/cc-switch-cli/releases/latest/download/${CC_SWITCH_ASSET}" \
-        -o /tmp/cc-switch.tar.gz; \
-    tar -xzf /tmp/cc-switch.tar.gz -C /tmp cc-switch; \
-    install -m 0755 /tmp/cc-switch /usr/local/bin/cc-switch; \
-    rm -f /tmp/cc-switch /tmp/cc-switch.tar.gz; \
-    cc-switch --version
-
 # AI CLI 分段安装，更新较频繁的包靠后，减少后续安装层缓存失效
 # 安装 Pi 本体（插件在容器内手动安装）
 ADD https://registry.npmjs.org/@earendil-works/pi-coding-agent/latest /tmp/pi-agent.json
@@ -187,18 +189,18 @@ RUN set -eux; \
     pi --version; \
     npm cache clean --force
 
-# 安装 Codex
-ADD https://registry.npmjs.org/@openai/codex/latest /tmp/codex.json
-RUN set -eux; \
-    rm -f /tmp/codex.json; \
-    npm install -g @openai/codex; \
-    npm cache clean --force
-
 # 安装 zcode
 ADD https://registry.npmjs.org/zcode-app-cli/latest /tmp/zcode.json
 RUN set -eux; \
     rm -f /tmp/zcode.json; \
     npm install -g zcode-app-cli; \
+    npm cache clean --force
+
+# 安装 Codex
+ADD https://registry.npmjs.org/@openai/codex/latest /tmp/codex.json
+RUN set -eux; \
+    rm -f /tmp/codex.json; \
+    npm install -g @openai/codex; \
     npm cache clean --force
 
 # 安装 Claude Code（更新较频繁，放在其他 AI CLI 之后）
