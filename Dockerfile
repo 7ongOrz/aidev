@@ -203,12 +203,20 @@ RUN set -eux; \
     npm install -g @openai/codex; \
     npm cache clean --force
 
-# 安装 Claude Code（更新较频繁，放在其他 AI CLI 之后）
+# 安装 Claude Code
 ADD https://registry.npmjs.org/@anthropic-ai/claude-code/latest /tmp/claude.json
 RUN set -eux; \
     rm -f /tmp/claude.json; \
     npm install -g @anthropic-ai/claude-code; \
     npm cache clean --force
+
+# 安装 Antigravity CLI（官方脚本，支持多架构）
+ADD https://antigravity-cli-auto-updater-974169037036.us-central1.run.app/manifests/linux_${TARGETARCH}.json /tmp/agy.json
+RUN set -eux; \
+    rm -f /tmp/agy.json; \
+    curl -fsSL https://antigravity.google/cli/install.sh | bash -s -- --dir /usr/local/bin; \
+    agy --version; \
+    rm -rf "${HOME}/.cache/antigravity"
 
 # 手动安装后台插件后，仅启用进程管理（命令、日志与完成通知）
 ENV PI_BG_FEATURES=process
